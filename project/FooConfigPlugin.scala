@@ -18,10 +18,11 @@ object FooConfigPlugin extends sbt.Plugin {
 
 		// need to have src/main/resources in Classpath
 		// THIS DOES NOT WORK!
-		fullClasspath += Attributed.blank( (resourceDirectory in Compile).value )
+		//fullClasspath += Attributed.blank( (resourceDirectory in Compile).value )
+		val cl = new java.net.URLClassLoader(Array((resourceDirectory in Compile).value.toURI.toURL))
 
 	    	// load src/main/resources/application.conf
-	    	val cfg = com.typesafe.config.ConfigFactory.load()
+	    	val cfg = com.typesafe.config.ConfigFactory.load(cl)
 		val barConfString = cfg getString "foo.bar"
 
 		// http://www.scala-sbt.org/release/docs/Howto/generatefiles.html
